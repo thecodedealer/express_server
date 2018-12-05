@@ -1,66 +1,76 @@
 const app = require('express')();
-var morgan = require('morgan')
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-const socket = require('./middleware/socket');
-var fs = require('fs');
-var path = require('path')
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-// create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
-    flags: 'a'
-})
+/*
+    Middleware
+*/
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// setup the logger
-app.use(morgan('combined', {
-    stream: accessLogStream
-}))
-
-app.get('/', function (req, res) {
-    console.log(req.ip);
-    res.sendfile('index.html');
+//Set headers
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With, Content-Type, Accept, authorization");
+    res.header("Access-Control-Allow-Methods", ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE']);
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
 });
 
 
-var users_online = 0;
 
-//Whenever someone connects this gets executed
-io.on('connection', function (socket) {
-    users_online++;
-    // console.log('A user connected' + ' Users online: ' + users_online);
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
-    //Send a message after a timeout of 4seconds
-    //  setTimeout(function() {
-    //     socket.send('Sent a message 4seconds after connection!');
-    //  }, 4000);
+// keep track of users online
+let online_users = 0;
+let auth_users = 0;
 
-    //Whenever someone disconnects this piece of code executed
-    socket.on('disconnect', function () {
-        users_online--;
-        // console.log('A user disconnected' + ' Users online: ' + users_online);
+io.on('connection', (socket) => {
+    let headers = socket.request;
+    let cookies = JSON.stringify(headers.headers.cookie);
+
+    // console.log(cookies.split('; '));
+
+    if(socket.request.headers.cookie.auth)
+        auth_users ++;
+    else
+        online_users ++;
+
+    socket.on('disconnect', ()=>{
+        online_users --;
+    });
+
+    socket.on('hello', (data) => {
+        console.log(data);
     });
 });
+
 
 app.get('/online-users', (req, res) => {
-    res.json({
-        users: users_online
-    });
-})
-
+    res.json({data: [online_users], status: true})
+});
 
 app.get('/send-message', (req, res) => {
-    io.on('connection', function (socket) {
-        //Send a message after a timeout of 4seconds
 
-        socket.send('Sent a message 4seconds after connection!');
-
+    io.emit('announcements', {
+        message: 'Ce zici boss?'
     });
-    res.json({
-        message: 'done'
-    });
-})
-
-
-http.listen(3000, function () {
-    console.log('listening on *:3000');
+    res.json('Message sent!')
 });
+
+app.get('/table-config', (req, res)  =>{
+    res.json([
+        {
+            name: ''
+        }
+    ])
+});
+
+
+// init server
+server.listen(3000);
