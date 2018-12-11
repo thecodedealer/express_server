@@ -77,6 +77,6 @@
 
 'use strict';
 
-const app = require('./app/server');
+const app = require('./build/server');
 
 app.start();

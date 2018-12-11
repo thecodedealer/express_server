@@ -8,7 +8,7 @@ export default () => {
 
     router.get('/', (req, res, next) => {
         try {
-            res.end('API Home');
+            res.end('API Home!!!');
         }
         catch (err) {
             next(err);
