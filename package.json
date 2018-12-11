@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack:watch": "webpack --progress -d",
     "webpack:build": "webpack --env.build --progress",
-    "webpack:build:prod": "webpack --env.build --env.prod --progress"
+    "webpack:build:prod": "webpack --env.build --env.prod --progress",
+    "commit": "git add -A && git commit -m \"New build\""
   },
   "author": "",
   "license": "ISC",

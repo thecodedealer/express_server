@@ -2,13 +2,15 @@
 
 import express from 'express';
 
+import testController from './test/controller'
+
 export default () => {
 
     const router = express.Router();
 
     router.get('/', (req, res, next) => {
         try {
-            res.end('API Home!!!');
+            testController(req, res, next);
         }
         catch (err) {
             next(err);
