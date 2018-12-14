@@ -4,10 +4,12 @@ import express from 'express';
 
 import testController from './test/controller'
 
+const router = express.Router();
+
 export default () => {
-
-    const router = express.Router();
-
+    /*
+        ROUTES
+    */
     router.get('/', (req, res, next) => {
         try {
             testController(req, res, next);
@@ -27,7 +29,7 @@ export default () => {
     });
 
     /*
-	    Method not found (must be the last one)
+	    Method not found
 	*/
     router.all('*', (req, res, next) => {
         try {

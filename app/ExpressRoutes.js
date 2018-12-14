@@ -1,10 +1,10 @@
 'use strict';
 
-import apiRoutes from '../api/routes';
+import apiRoutes from './api/routes';
 
 export default app => {
 
-    // Use API routes
+    // Load API routes
     app.use('/api', apiRoutes(app));
 
     app.get('/', (req, res, next) => {

@@ -7,7 +7,7 @@ import cookie_parser from 'cookie-parser';
 
 import Promise from 'bluebird';
 
-import ExpressRoutes from './routes/ExpressRoutes';
+import ExpressRoutes from './ExpressRoutes';
 
 
 const PORT = process.env.PORT || 5000;
