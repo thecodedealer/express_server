@@ -2,6 +2,6 @@
 
 export default (req, res, next) => {
 
-    res.end('API Home!!! yeeeey');
+    res.end('API Home!!!');
 
 };
