@@ -1,131 +1,4 @@
-const _ = require('underscore');
-const mongoose = require('mongoose');
-const config = require('../../config');
-const Promise = require('bluebird');
-
-const timeService = require('../timeService');
-
-//Models
-const Results = require('../../models/resultsModel');
-const Tickets = require('../../models/ticketModel');
-
-
-const crawlerService = require('./crawlerService');
-const analizeService = require('./analizeService');
-
-const Logger = require('../log/logService');
-// mongoose.connect(config.database, {useNewUrlParser: true});
-
-//instantiate Logger
-const log = new Logger('../../logs/crawler.log');
-
-
-const RESULT = {
-    date: {
-        full: '',
-        year: '',
-        month: '',
-        day: ''
-    },
-    type: '',
-    results: {},
-    winnings: {}
-};
-
-const findResults = () => {
-    log.info('Crawler start ...');
-
-    /*
-        VARIABLES
-    */
-    const nextGameDate = timeService.getNGD().gameDate.split('|')[0];
-    const lastSavedResultDate = crawlerService.getLastSavedDate();
-
-    // If next game date is matching last date saved in local DB => exit function
-    if (lastSavedResultDate === nextGameDate) {
-        log.info(`Results already acquired for [ ${nextGameDate} ]`);
-        process.exit();
-        return;
-    } else
-        crawlerService.fetchLotoHomePage(true)
-            .then(data => {
-                const $ = data;
-
-                // Check Loto Home page for date and compare with last saved date
-                // If no now date => log
-                // Else if new date => start crawling for results and winnings
-                const lottoDate = crawlerService.getHomePageDate($);
-
-                if (lottoDate === lastSavedResultDate) {
-                    log.error(`- NO new results [SITE DATE: ${lottoDate} | LAST DATE: ${crawlerService.getLastSavedDate()} ]`);
-                    process.exit();
-                } else {
-                    log.info('Crawling ...');
-
-                    // 1. Check if special extraction
-                    let isSpecial = crawlerService.isSpecial($);
-
-                    // 2. resolve results
-                    RESULT.results = !isSpecial ? crawlerService.getResults($)
-                        : crawlerService.addSpeciale(crawlerService.getResults($), crawlerService.getResultsSpecial($));
-
-                    // 3. resolve winning
-                    crawlerService.fetchLotoWinningsPages(true)
-                        .then(data => {
-
-                            //4. get winnigs
-                            let winnings = crawlerService.getWinnings(data, lottoDate);
-
-                            //5. check for winnings sanity
-                            if (!winnings.sanityCheck.status) {
-                                log.error(`Sanity check error! - ${winnings.sanityCheck.message} -`);
-                                process.exit();
-                            } else {
-                                RESULT.winnings = winnings.winnings;
-
-                                // console.log(JSON.stringify(RESULT.winnings, null, '\t'));
-
-                                log.info('Results acquired.');
-
-                                // console.log(RESULT);
-
-                                // resolve date
-                                RESULT.date = {
-                                    full: lottoDate,
-                                    year: lottoDate.split('-')[2],
-                                    month: lottoDate.split('-')[1],
-                                    day: lottoDate.split('-')[0]
-                                };
-
-                                // save result to DB
-                                Results.create({
-                                    resultsId: '1234',
-                                    date: RESULT.date,
-                                    type: isSpecial ? 2 : 1,
-                                    results: RESULT.results,
-                                    winnings: RESULT.winnings
-                                })
-                                    .then(data => {
-                                        log.info('Result saved to DB successful');
-                                        mongoose.connection.close();
-
-                                        //add date to local dates DB
-                                        crawlerService.saveNewDateLocal(lottoDate, err => {
-                                            if (err) log.error(err);
-                                            log.info('Date saved local.');
-                                        });
-                                    })
-                                    .catch(err => {
-                                        log.error('Error from saving result to DB.');
-                                        mongoose.connection.close();
-                                    });
-                            }
-                        })
-                        .catch(err => log.error(err));
-                }
-            })
-            .catch(err => log.error(err))
-};
+const analizeService = require('./testService');
 
 const testTickets = [
     {
@@ -529,11 +402,11 @@ let played = [
 // analizeService.checkMainVariants(777, played, result);
 
 let testPlayedExtra = {
-    number: '330633',
-    variants: 1
+    number: '009999',
+    variants: 2
 };
 
-let testResultExtra = '612633';
+let testResultExtra = '612200';
 
 
-analizeService.checkExtra(540, testPlayedExtra, testResultExtra);
+analizeService.checkExtra(777, testPlayedExtra, testResultExtra);

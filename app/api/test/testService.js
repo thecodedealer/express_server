@@ -61,6 +61,12 @@ class AnalyzeService {
             }
         };
 
+        this.extraLengh = {
+            id_649: 7,
+            id_540: 6,
+            id_777: 6
+        };
+
         this.winnings = {
             "id_649": {
                 "game": 649,
@@ -319,23 +325,28 @@ class AnalyzeService {
         let winnings = [];
         const baseNum = parseInt(played.number);
 
+        // check if base number starts with 0 and take count of this
+        let hasZero = this._checkNegativeNumber(played.number, baseNum);
+
         // generate variants of numbers
         let variants = _.map(_.range(0, played.variants), num => {
-            return (baseNum + num).toString();
+            let newVariant = baseNum + num;
+
+            return hasZero ? this._resolveIfZero(gameId, newVariant, hasZero) : newVariant.toString();
         });
 
         // iterate played variants
         variants.forEach((variant, index, arr) => {
             let hits = this.getExtraHits(gameId, variant, result);
-
-            winnings.push({
-                number: variant,
-                hits: hits.hit,
-                win: this.getExtraWinnings(gameId, hits)
-            });
+            if(hits.hit)
+                winnings.push({
+                    number: variant,
+                    hits: hits.hit,
+                    win: this.getExtraWinnings(gameId, hits)
+                });
         });
 
-        console.log(winnings);
+        console.log(!_.isEmpty(winnings) ? winnings : false);
     }
 
     /*
@@ -359,7 +370,7 @@ class AnalyzeService {
             case 540:
                 return this._hitExtra540(played, result);
             case 777:
-                return this._hitExtra77(played, result);
+                return this._hitExtra540(played, result);
         }
     }
 
@@ -381,7 +392,7 @@ class AnalyzeService {
             case 540:
                 return this._extra540winning(hits);
             case 777:
-                return this._extra777winning(hits);
+                return this._extra540winning(hits);
         }
     }
 
@@ -505,7 +516,7 @@ class AnalyzeService {
 
     _hitExtra540(played, result) {
         const mainChecks = [0, 5, 4, 3, 2];
-        const reverseChecks = [1, 2, 3, 4]
+        const reverseChecks = [1, 2, 3, 4];
 
         // generate union between main and special checks
         let checks = _.union(
@@ -532,10 +543,6 @@ class AnalyzeService {
         };
     }
 
-    _hitExtra77(played, result) {
-
-    }
-
     _extra649winning(hits) {
         let win = {};
 
@@ -558,9 +565,27 @@ class AnalyzeService {
             return false;
     }
 
-    _extra777winning(hits) {
+    _checkNegativeNumber(strNum, intNum) {
+        const strNumLength = strNum.length;
+        const intNumLength = intNum.toString().length;
 
+        if(strNumLength !== intNumLength)
+            return strNumLength - intNumLength;
+        else
+            return false;
     }
+
+    _resolveIfZero(gameId, num, zero) {
+        let numLength = num.toString().length;
+        let extraLength = this.extraLengh[`id_${gameId}`];
+
+        const diff = extraLength - numLength;
+
+        let preZero = _.map(_.range(diff), num => '0').join("");
+
+        return preZero + num.toString();
+    }
+
 
 }
 
