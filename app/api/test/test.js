@@ -365,6 +365,11 @@ const findWinners = () => {
 
 // findWinners();
 
+/*
+        CHECK MAIN
+*/
+
+
 let result = [
     22,
     23,
@@ -401,12 +406,24 @@ let played = [
 
 // analizeService.checkMainVariants(777, played, result);
 
+/*
+        CHECK EXTRA
+*/
+
 let testPlayedExtra = {
     number: '009999',
-    variants: 2
+    variants: 4
 };
 
-let testResultExtra = '612200';
+let testResultExtra = '612234';
 
 
 analizeService.checkExtra(777, testPlayedExtra, testResultExtra);
+
+/*
+        CALCULATE TOTAL
+*/
+
+let total = [ '10,52', '10,52' ];
+
+// analizeService._calculateTotal(total);

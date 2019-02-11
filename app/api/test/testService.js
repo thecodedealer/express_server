@@ -323,6 +323,7 @@ class AnalyzeService {
         // IN: type -> game id || played -> array with objects (payed variants) || result -> array with results
 
         let winnings = [];
+        let TOTAL = [];
         const baseNum = parseInt(played.number);
 
         // check if base number starts with 0 and take count of this
@@ -338,15 +339,21 @@ class AnalyzeService {
         // iterate played variants
         variants.forEach((variant, index, arr) => {
             let hits = this.getExtraHits(gameId, variant, result);
-            if(hits.hit)
+            if (hits.hit) {
+                let win = this.getExtraWinnings(gameId, hits);
+                TOTAL.push(win.meta.money);
                 winnings.push({
                     number: variant,
                     hits: hits.hit,
-                    win: this.getExtraWinnings(gameId, hits)
+                    win: win.win
                 });
+            }
         });
 
-        console.log(!_.isEmpty(winnings) ? winnings : false);
+        //TODO: Calculate Total winnings for all variants
+        let totalWinnings = this._calculateTotal(TOTAL);
+
+        console.log(!_.isEmpty(winnings) ? {win: winnings, total: totalWinnings} : false);
     }
 
     /*
@@ -527,7 +534,6 @@ class AnalyzeService {
             _.map(reverseChecks, num => {
                 return result.substr(num);
             })
-
         );
 
         // find hit
@@ -560,7 +566,12 @@ class AnalyzeService {
         if (hits.hit) {
             let mappedHits = this.mapToCat.id_540.extra[`index_${hits.flag}`];
             win[mappedHits] = this.winnings.id_540.extra[mappedHits][2];
-            return win;
+            return {
+                win: win,
+                meta: {
+                    money: this.winnings.id_540.extra[mappedHits][2]
+                }
+            };
         } else
             return false;
     }
@@ -569,7 +580,7 @@ class AnalyzeService {
         const strNumLength = strNum.length;
         const intNumLength = intNum.toString().length;
 
-        if(strNumLength !== intNumLength)
+        if (strNumLength !== intNumLength)
             return strNumLength - intNumLength;
         else
             return false;
@@ -586,6 +597,15 @@ class AnalyzeService {
         return preZero + num.toString();
     }
 
+    _calculateTotal(data) {
+        let total = 0;
+
+        data.forEach((el, index, arr) => {
+            total += parseFloat(el.replace(',', '.'));
+        });
+
+        return total;
+    }
 
 }
 
