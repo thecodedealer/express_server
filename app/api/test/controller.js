@@ -2,6 +2,12 @@
 
 export default (req, res, next) => {
 
-    res.end('API Home!!!');
+    const fields = req.body.fields;
+
+    res.json({
+        status: true,
+        message: "",
+        data: ['one', 'two', 'three']
+    })
 
 };

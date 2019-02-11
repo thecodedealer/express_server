@@ -4,13 +4,14 @@ import express from 'express';
 import http from 'http';
 import body_parser from 'body-parser';
 import cookie_parser from 'cookie-parser';
+const cors = require('cors');
 
 import Promise from 'bluebird';
 
 import ExpressRoutes from './ExpressRoutes';
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const config = () => {
     const app = express();
@@ -19,6 +20,7 @@ const config = () => {
     app.set('debug', true);
     app.use(body_parser.json());
     app.use(cookie_parser());
+    app.use(cors())
 
     return app;
 };
