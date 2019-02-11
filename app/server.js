@@ -7,7 +7,7 @@ import cookie_parser from 'cookie-parser';
 
 import Promise from 'bluebird';
 
-import ExpressRoutes from './ExpressRoutes';
+import mainRoutes from './mainRoutes';
 
 import customResponse from './services/abstract/customResponseService';
 
@@ -34,7 +34,7 @@ const run = async app => {
     /*
         Load routes
     */
-    ExpressRoutes(app);
+    mainRoutes(app);
 
     /*
 	    Start server

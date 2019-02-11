@@ -1,11 +1,14 @@
 'use strict';
+import express from 'express';
 
 import apiRoutes from './api/routes';
+
+const router = express.Router();
 
 export default app => {
 
     // Load API routes
-    app.use('/api', apiRoutes(app));
+    app.use('/api', apiRoutes(router));
 
     // Default routes
     app.get('/', (req, res, next) => {

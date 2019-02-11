@@ -1,12 +1,9 @@
 'use strict';
 
-import express from 'express';
-
 import testController from './test/controller'
 
-const router = express.Router();
 
-export default () => {
+export default router => {
     /*
         ROUTES
     */

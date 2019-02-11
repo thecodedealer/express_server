@@ -1,6 +1,6 @@
 'use strict';
 
-export default (express) => {
+export default express => {
     const res = express.response;
 
     res.ok = function (message = "", data = {}) {
@@ -27,6 +27,7 @@ export default (express) => {
         // log.error(err);
         this.status(500);
         this.json({
+            status: false,
             message: "Server error!",
             data: err
         })
