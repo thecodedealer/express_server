@@ -9,12 +9,17 @@ import Promise from 'bluebird';
 
 import ExpressRoutes from './ExpressRoutes';
 
+import customResponse from './services/abstract/customResponseService';
+
 
 const PORT = process.env.PORT || 5000;
 
 const config = () => {
     const app = express();
     app.set('server', http.Server(app));
+
+    //Set custom responses
+    app.set('customResponses', customResponse(express));
 
     app.set('debug', true);
     app.use(body_parser.json());
@@ -52,5 +57,3 @@ export const start = async () => {
         process.exit();
     }
 };
-
-// module.exports = start;

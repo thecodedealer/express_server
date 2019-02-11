@@ -7,6 +7,7 @@ export default app => {
     // Load API routes
     app.use('/api', apiRoutes(app));
 
+    // Default routes
     app.get('/', (req, res, next) => {
         try {
             res.end('Home');

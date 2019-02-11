@@ -21,15 +21,25 @@ export default () => {
 
     router.get('/users', (req, res, next) => {
         try {
-            res.end('API Users');
+            res.nok('API Users');
         }
         catch (err) {
             next(err);
         }
     });
 
+    router.get('/get-error', (req, res, next) => {
+        try {
+            res.error('API Users');
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+
     /*
-	    Method not found
+	    Endpoint not found
 	*/
     router.all('*', (req, res, next) => {
         try {
