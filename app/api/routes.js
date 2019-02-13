@@ -8,9 +8,34 @@ export default router => {
     /*
         API ROUTES
     */
+    router.get('/', (req, res, next) => {
+        try {
+            res.ok("API Home")
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
     router.post('/', (req, res, next) => {
         try {
             testController(req, res, next);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+    router.post('/getTestTable', (req, res, next) => {
+        try {
+
+            // console.log('Requested fields: ', req.body.fields);
+
+            res.ok('ok', [
+                ['Tiger Nixon', 'System Architect', 'Edinburgh', '61', '2011/04/25', '$320,800'],
+                ['Tiger Nixon', 'System Architect', 'Edinburgh', '62', '2011/04/25', '$320,800'],
+                ['Tiger Nixon', 'System Architect', 'Edinburgh', '63', '2011/04/25', '$320,800']
+            ])
         }
         catch (err) {
             next(err);
@@ -44,14 +69,6 @@ export default router => {
         }
     });
 
-
-    /*
-<<<<<<< HEAD
-	    API method not found
-=======
-	    Endpoint not found
->>>>>>> 27f21086bce5051b227888a5b908af50be95d0c9
-	*/
     router.all('*', (req, res, next) => {
         try {
             res.json({
@@ -60,6 +77,7 @@ export default router => {
                 data: {}
             });
         } catch (err) {
+            res.error(err);
             next(err);
         }
     });

@@ -13,7 +13,7 @@ import mainRoutes from './mainRoutes';
 import customResponse from './services/abstract/customResponseService';
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const config = () => {
     const app = express();
