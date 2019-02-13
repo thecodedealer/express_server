@@ -8,7 +8,9 @@ const cors = require('cors');
 
 import Promise from 'bluebird';
 
-import ExpressRoutes from './ExpressRoutes';
+import mainRoutes from './mainRoutes';
+
+import customResponse from './services/abstract/customResponseService';
 
 
 const PORT = process.env.PORT || 3000;
@@ -16,6 +18,9 @@ const PORT = process.env.PORT || 3000;
 const config = () => {
     const app = express();
     app.set('server', http.Server(app));
+
+    //Set custom responses
+    app.set('customResponses', customResponse(express));
 
     app.set('debug', true);
     app.use(body_parser.json());
@@ -31,7 +36,7 @@ const run = async app => {
     /*
         Load routes
     */
-    ExpressRoutes(app);
+    mainRoutes(app);
 
     /*
 	    Start server
@@ -54,5 +59,3 @@ export const start = async () => {
         process.exit();
     }
 };
-
-// module.exports = start;

@@ -1,13 +1,10 @@
 'use strict';
 
-import express from 'express';
-
 import testController from './test/controller'
 import contentController from './content/controller';
 
-const router = express.Router();
 
-export default () => {
+export default router => {
     /*
         API ROUTES
     */
@@ -31,15 +28,29 @@ export default () => {
 
     router.get('/users', (req, res, next) => {
         try {
-            res.end('API Users');
+            res.nok('API Users');
         }
         catch (err) {
             next(err);
         }
     });
 
+    router.get('/get-error', (req, res, next) => {
+        try {
+            res.error('API Users');
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+
     /*
+<<<<<<< HEAD
 	    API method not found
+=======
+	    Endpoint not found
+>>>>>>> 27f21086bce5051b227888a5b908af50be95d0c9
 	*/
     router.all('*', (req, res, next) => {
         try {
