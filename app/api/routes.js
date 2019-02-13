@@ -9,7 +9,7 @@ const router = express.Router();
 
 export default () => {
     /*
-        ROUTES
+        API ROUTES
     */
     router.post('/', (req, res, next) => {
         try {
@@ -39,7 +39,7 @@ export default () => {
     });
 
     /*
-	    Method not found
+	    API method not found
 	*/
     router.all('*', (req, res, next) => {
         try {
