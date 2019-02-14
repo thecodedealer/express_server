@@ -42,6 +42,44 @@ export default router => {
         }
     });
 
+    router.post('/getTestChart', (req, res, next) => {
+        try {
+
+            // console.log('Requested fields: ', req.body.fields);
+
+            res.ok('ok', [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451])
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+    router.post('/getTestBars', (req, res, next) => {
+        try {
+
+            // console.log('Requested fields: ', req.body.fields);
+
+            res.ok('ok', [4215, 5312, 6251, 7841, 9821, 14984])
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+    router.post('/getTestPie', (req, res, next) => {
+        try {
+
+            // console.log('Requested fields: ', req.body.fields);
+
+            res.ok('ok', [12.21, 15.58, 11.25, 8.32])
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+
+
+
     router.get('/getContent', (req, res, next) => {
        try {
            contentController(req, res, next)
