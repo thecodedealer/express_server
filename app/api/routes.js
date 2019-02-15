@@ -71,7 +71,7 @@ export default router => {
 
             // console.log('Requested fields: ', req.body.fields);
 
-            res.ok('ok', [12.21, 15.58, 11.25, 8.32])
+            res.ok('ok', [25, 25, 25, 25])
         }
         catch (err) {
             next(err);
