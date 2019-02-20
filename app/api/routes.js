@@ -11,8 +11,7 @@ export default router => {
     router.get('/', (req, res, next) => {
         try {
             res.ok("API Home")
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
@@ -20,8 +19,7 @@ export default router => {
     router.post('/', (req, res, next) => {
         try {
             testController(req, res, next);
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
@@ -36,8 +34,7 @@ export default router => {
                 ['Tiger Nixon', 'System Architect', 'Edinburgh', '62', '2011/04/25', '$320,800'],
                 ['Tiger Nixon', 'System Architect', 'Edinburgh', '63', '2011/04/25', '$320,800']
             ])
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
@@ -48,8 +45,7 @@ export default router => {
             // console.log('Requested fields: ', req.body.fields);
 
             res.ok('ok', [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451])
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
@@ -60,40 +56,34 @@ export default router => {
             // console.log('Requested fields: ', req.body.fields);
 
             res.ok('ok', [4215, 5312, 6251, 7841, 9821, 14984])
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
 
     router.post('/getTestPie', (req, res, next) => {
         try {
-
             // console.log('Requested fields: ', req.body.fields);
 
             res.ok('ok', [25, 25, 25, 25])
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
 
 
-
     router.get('/getContent', (req, res, next) => {
-       try {
-           contentController(req, res, next)
-       }
-       catch (e) {
-           next(e)
-       }
+        try {
+            contentController(req, res, next)
+        } catch (e) {
+            next(e)
+        }
     });
 
     router.get('/users', (req, res, next) => {
         try {
             res.nok('API Users');
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });
@@ -101,8 +91,7 @@ export default router => {
     router.get('/get-error', (req, res, next) => {
         try {
             res.error('API Users');
-        }
-        catch (err) {
+        } catch (err) {
             next(err);
         }
     });

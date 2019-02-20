@@ -4,7 +4,9 @@ import express from 'express';
 import http from 'http';
 import body_parser from 'body-parser';
 import cookie_parser from 'cookie-parser';
-const cors = require('cors');
+import cors from 'cors';
+import socket_io from 'socket.io'
+// import socket from './socket/socketService';
 
 import Promise from 'bluebird';
 
@@ -25,7 +27,13 @@ const config = () => {
     app.set('debug', true);
     app.use(body_parser.json());
     app.use(cookie_parser());
-    app.use(cors())
+    app.use(cors({
+        origin: true,
+        credentials: true,
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+        maxAge: 86400
+    }));
+    // app.set('socket', socket(app));
 
     return app;
 };
@@ -37,6 +45,16 @@ const run = async app => {
         Load routes
     */
     mainRoutes(app);
+
+    const io = socket_io(server);
+
+    io.on('connection', socket => {
+        console.log('a user connected');
+
+        socket.on('hello', msg => {
+            console.log(msg)
+        })
+    });
 
     /*
 	    Start server
