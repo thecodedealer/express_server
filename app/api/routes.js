@@ -4,7 +4,7 @@ import testController from './test/controller'
 import contentController from './content/controller';
 
 
-export default router => {
+export default (app, router) => {
     /*
         API ROUTES
     */
@@ -80,9 +80,12 @@ export default router => {
         }
     });
 
-    router.get('/users', (req, res, next) => {
+    router.post('/getUsers', (req, res, next) => {
         try {
-            res.nok('API Users');
+            let arr = []
+            const socket = app.get('socket');
+            arr.push(socket.getUsers());
+            res.ok('Users connected', arr);
         } catch (err) {
             next(err);
         }

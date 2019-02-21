@@ -9,4 +9,5 @@ const CONTENT = {
 export default (req, res, next) => {
 
     res.json(CONTENT);
+
 };

@@ -8,7 +8,7 @@ const router = express.Router();
 export default app => {
 
     // Load API routes
-    app.use('/api', apiRoutes(router));
+    app.use('/api', apiRoutes(app, router));
 
     // Default routes
     app.get('/', (req, res, next) => {

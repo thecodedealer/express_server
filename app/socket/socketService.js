@@ -2,21 +2,48 @@
 
 import socket_io from 'socket.io';
 
+
 export default app => {
-    return class SocketService {
 
+    class SocketService {
         constructor() {
-            this.io = socket_io(app.get('server'));
+            this.clients = 0;
+            this.actions = {};
 
-            this.init();
         }
 
         init() {
-            this.io.on('connection', socket => {
-                console.log('New user connected.');
-            })
+            const server = app.get('server');
+            const io = socket_io(server);
+
+            io.on('connection', socket => {
+
+                console.log('Client connected');
+                this.clients += 1;
+
+
+                socket.on('hello', msg => {
+                    console.log(msg)
+                });
+
+                socket.emit('action', {
+                    message: 'Hello'
+                });
+
+                socket.on('disconnect', () => {
+                    console.log('Client disconnected');
+                    this.clients -= 1;
+                });
+            });
         }
 
+
+        getUsers() {
+            return this.clients;
+        }
     }
+
+
+    return new SocketService();
 }
 
