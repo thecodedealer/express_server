@@ -17,7 +17,7 @@ class mongoDB {
         /*
             VARIABLES
         */
-        this.URI = 'mongodb://code.dealer:Scylla3484@ds259258.mlab.com:59258/lotomania';
+        this.URI = 'z';
         this.modelsPath = path.join(__dirname, '..', 'models');
 
         // OPTIONS
@@ -25,9 +25,6 @@ class mongoDB {
             useNewUrlParser: true,
             promiseLibrary: bluebird
         };
-
-        // CONNECT TO DB
-        mongoose.Promise = bluebird;
 
         // FETCH MODELS
         this.models = this.fetchModels();
@@ -38,6 +35,7 @@ class mongoDB {
 
     // CONNECT TO DB
     connect() {
+        mongoose.Promise = bluebird;
         return mongoose.connect(this.URI, this.options)
             .then(() => console.log('DB connected'));
     }

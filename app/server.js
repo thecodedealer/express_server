@@ -5,7 +5,6 @@ import http from 'http';
 import body_parser from 'body-parser';
 import cookie_parser from 'cookie-parser';
 import cors from 'cors';
-import socket_io from 'socket.io'
 import socket from './socket/socketService';
 
 import Promise from 'bluebird';
@@ -57,7 +56,7 @@ const run = async app => {
 	    Start server
 	*/
     server.listen(PORT, () => {
-        console.log(`App is running on port ${PORT}`);
+        console.log(`App is running on port ${ PORT }`);
     });
 };
 
