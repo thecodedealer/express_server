@@ -82,7 +82,7 @@ export default (app, router) => {
 
     router.post('/getUsers', (req, res, next) => {
         try {
-            let arr = []
+            let arr = [];
             const socket = app.get('socket');
             arr.push(socket.getUsers());
             res.ok('Users connected', arr);
