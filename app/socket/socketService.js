@@ -26,6 +26,10 @@ export default app => {
                     console.log(msg)
                 });
 
+                socket.on('auth', data => {
+                    console.log(data)
+                });
+
                 socket.emit('action', {
                     message: 'Hello'
                 });

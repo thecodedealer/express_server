@@ -1,6 +1,11 @@
 const config = require('../config');
 const _ = require('underscore');
 
+
+const URLS = {
+    db : ''
+};
+
 class AppService {
     constructor() {
         /*
@@ -9,6 +14,10 @@ class AppService {
         this.userProfile = ['name', 'sex', 'age', 'email'];
         this.reqResults = ['year', 'month'];
         this.userUpdateTicket = ['status', 'extra.number'];
+    }
+
+    getDbUrl() {
+        return URLS['db'];
     }
 
     /*
@@ -66,4 +75,4 @@ class AppService {
 
 }
 
-module.exports = new AppService();
+export default new AppService();
